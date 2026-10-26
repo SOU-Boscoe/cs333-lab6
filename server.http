@@ -1,0 +1,20 @@
+# Put your server's address here (from Slack), then send each request.
+@base = http://your-server-address/api
+
+### 1. A random joke
+GET {{base}}/random
+
+### 2. Joke number 3
+GET {{base}}/jokes/3
+
+### 3. Only the Puns
+GET {{base}}/filter?type=Puns
+
+### 4. Add a joke
+POST {{base}}/jokes
+Content-Type: application/x-www-form-urlencoded
+
+text=Why do Java developers wear glasses? Because they don't C#.&type=Programming
+
+### 5. Get the joke you just added (change 13 to the id it got)
+GET {{base}}/jokes/13
