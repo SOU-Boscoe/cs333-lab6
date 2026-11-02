@@ -28,6 +28,19 @@ ssh yourname@your-server-address
 
 Everything until Part 4 is typed **on the server** (your prompt shows the server's name).
 
+## Before you start: free port 3000
+
+A **port** is a numbered door on a server that a program listens on. **Only one program can use a port at a time.** In class you left a test app called `hello` running on port 3000 with pm2, and your jokes API needs port 3000 too. If `hello` is still there, your API won't start: you get `EADDRINUSE: address already in use :::3000`.
+
+`pm2 delete` stops an app and removes it from pm2's list:
+
+```bash
+pm2 delete hello
+pm2 list
+```
+
+`pm2 list` should now show an empty table. (If it says `Process or Namespace hello not found`, it was already gone. That's fine. If it says `pm2: command not found`, skip this; step 4 sets up pm2.)
+
 ## 1. Look around
 
 If you did Part 4 of Lab 5, skip to step 2. If not, type each of these and look at what it says:
@@ -76,10 +89,19 @@ Now go back to the first terminal and press **Ctrl+C**. Send the `curl` again.
 
 **pm2** is a process manager: it starts your Node app, keeps it running when you log out, and restarts it if it crashes.
 
-## 4. Install pm2 and start your API
+## 4. Check pm2 and start your API
+
+You installed pm2 in class. Check that it's there:
 
 ```bash
-sudo npm install -g pm2
+pm2 -v
+```
+
+It prints a version number. (If it says `pm2: command not found`, you missed that step: run `sudo npm install -g pm2`, then `pm2 -v` again.)
+
+Now start your API with pm2. Make sure you're still in your `Jokes` folder:
+
+```bash
 pm2 start index.js --name jokes
 pm2 list
 ```
@@ -128,16 +150,17 @@ Your API listens on port **3000**. Web browsers use port **80** for `http://`. *
 browser  --->  nginx (port 80)  --- /api/... --->  your jokes API (port 3000)
 ```
 
-## 7. Install nginx
+## 7. Check nginx
+
+nginx is already on your server: in class it served the `index.html` you copied up. Check that it's running:
 
 ```bash
-sudo apt update
-sudo apt install nginx
+systemctl status nginx --no-pager | head -3
 ```
 
-(If it says nginx is already the newest version, that's fine.) Open `http://your-server-address` in your laptop's browser.
+It should say `active (running)`. (If it says `Unit nginx.service could not be found`, install it: `sudo apt update`, then `sudo apt install -y nginx`.) Open `http://your-server-address` in your laptop's browser.
 
-**Question 5:** what page do you see?
+**Question 5:** what page do you see? Where on the server does that page live?
 
 **TODO:** also try `http://your-server-address:3000/random` in your browser. **Question 6:** what happens? (Either answer is fine; just say what you see.)
 
@@ -206,6 +229,8 @@ Send request **5** again.
 11. Push this repo (`server.http` with your address, and this README with your answers) to **your own GitHub repo**.
 12. Submit in Moodle: your GitHub repo link **and** your API link, `http://your-server-address/api/random`. Leave your API running so I can test it.
 
+**Due Sunday, November 8, 11:59 PM.**
+
 ---
 
 ## Stuck?
@@ -215,7 +240,7 @@ Send request **5** again.
 | `Permission denied (publickey)` | Your server doesn't have your SSH key, or you used the wrong username | Check the username in Slack, then ask in the Slack thread |
 | `git clone` asks for a username and password | Your Lab 5 repo is private | Make it public (step 2), then clone again |
 | `Cannot find package 'express'` | You didn't `npm install` in the `Jokes` folder | `cd` into `Jokes`, then `npm install` |
-| `EADDRINUSE: address already in use :::3000` | Your API is already running (by hand or in pm2) | Ctrl+C the one you started by hand; `pm2 list` to see pm2's |
+| `EADDRINUSE: address already in use :::3000` | Something else is on port 3000: the `hello` test app from class, or your API is already running (by hand or in pm2) | `pm2 list` to see what pm2 runs; `pm2 delete hello`; Ctrl+C the one you started by hand |
 | `pm2: command not found` | pm2 isn't installed | `sudo npm install -g pm2` |
 | `sudo: npm: command not found` | Node on your server was installed just for your user (with nvm) | Leave out `sudo`: `npm install -g pm2` |
 | `pm2 list` says `errored`, or `↺` keeps going up | Your app crashes when it starts | `pm2 logs jokes` shows the error |
