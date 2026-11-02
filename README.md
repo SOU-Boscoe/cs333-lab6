@@ -383,6 +383,14 @@ It should say `active (running)`. Open `http://your-server-address` in your **la
 
 ## 19. Send /api/ to your API
 
+In class you added a `location /api/` block to nginx for your test app. It sends `/api/` to whatever runs on port 3000, and that's your jokes API now. Check it's there:
+
+```bash
+grep -A2 "location /api/" /etc/nginx/sites-available/default
+```
+
+If it prints the three lines below, **don't add them again** (two `location /api/` blocks is an error). Skip to the `nginx -t` test below. If it prints nothing, add the block:
+
 Open nginx's settings for your site:
 
 ```bash
@@ -397,7 +405,7 @@ Use the arrow keys to find the `location / {` block (a few lines, ending with `}
 	}
 ```
 
-Save: **Ctrl+O**, **Enter**, then **Ctrl+X** to leave nano.
+Save: **Ctrl+O**, **Enter**, then **Ctrl+X** to leave nano. (Using vim instead? `i` to type, then Esc and `:wq`.)
 
 Check what you typed, then load it:
 
@@ -471,6 +479,7 @@ To update the API on your server: copy the changed file up again from your **lap
 | `curl: (7) Failed to connect to localhost port 3000` | Your API isn't running | `pm2 list`, then `pm2 restart jokes` |
 | `nginx -t` says `unexpected "}"` or `unknown directive` | A typo, or a missing `;` or `}` | Check the line number it gives you; every setting ends with `;` |
 | `502 Bad Gateway` | nginx is working, but your API isn't running | `pm2 list` and `pm2 logs jokes` |
+| `nginx -t` says `duplicate location "/api/"` | You added the block again; it was already there from class | Open the file and delete one of the two `location /api/ { ... }` blocks |
 | `404 Not Found` from nginx | The `location /api/` block isn't there, or nginx wasn't reloaded | Check the file, `sudo nginx -t`, `sudo systemctl reload nginx` |
 | `Cannot GET /api/random` (from Express) | The last `/` is missing in `proxy_pass` | `proxy_pass http://localhost:3000/;` |
 | The browser can't connect at all | Wrong address, or the server isn't on | Check your server's address; `ping your-server-address` |
