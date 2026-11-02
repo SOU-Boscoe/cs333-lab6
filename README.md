@@ -17,8 +17,6 @@ Do each step below, and **answer the questions right here in this `README.md` fi
 
 **Stuck?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried.
 
-**Due Sunday, November 8, 11:59 PM.**
-
 ---
 
 # Part 1: MongoDB shell, CRUD 💻 LAPTOP
@@ -452,8 +450,6 @@ To update the API on your server: copy the changed file up again from your **lap
 
 22. Push this repo to **your own GitHub repo**: this README with your answers, `fruitsProject` (`app.js` and `package.json`, not `node_modules`), and `server.http` with your address.
 23. Submit in Moodle: your GitHub repo link **and** your API link, `http://your-server-address/api/random`. Leave your API running so I can test it.
-
-**Due Sunday, November 8, 11:59 PM.**
 
 ---
 
