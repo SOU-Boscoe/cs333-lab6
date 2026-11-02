@@ -1,4 +1,4 @@
-# Put your server's address here (from Slack), then send each request.
+# Put your server's address on the next line (the same address you ssh to), then send each request.
 @base = http://your-server-address/api
 
 ### 1. A random joke
